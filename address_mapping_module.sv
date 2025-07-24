@@ -1,12 +1,14 @@
-module address_mapping_module (
+module address_mapping_module #(
+    parameter ERR_STATUS_ADDRESS = 1;
+    parameter PAYLOAD_ADDRESS = 2;
+    parameter DATA_SIZE_ADDRESS = 4;
+)(
     input logic psel_x, pwrite,
     input logic [2:0] paddr,
     output logic [1:0] write_select,
     output logic [1:0] read_select,
     output logic pslverr
 );
-    import config::*;
-
     always_comb begin
         if (psel_x) begin
             if (pwrite && paddr == ERR_STATUS_ADDRESS) begin
