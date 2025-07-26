@@ -1,0 +1,31 @@
+timestamp: "25203141329"
+arch: ICE40
+fpga_info {
+  fpga_id: "ice40hx4k-tq144-8k"
+  part_num: "ICE40HX4K-TQ144"
+  size: "8k"
+  ice40 {
+    type: "hx8k"
+    pack: "tq144:4k"
+  }
+}
+environment {
+  platform_id: "darwin-arm64"
+  is_windows: false
+  terminal_mode: FORCE_TERMINAL
+  theme_name: "light"
+  debug_level: 0
+  yosys_path: "/Users/anhtupham/.apio/packages/oss-cad-suite/share/yosys"
+  trellis_path: "/Users/anhtupham/.apio/packages/oss-cad-suite/share/trellis"
+}
+apio_env_params {
+  env_name: "default"
+  board_id: "alhambra-ii"
+  top_module: "APB_interface_module"
+}
+target {
+  sim {
+    force_sim: false
+    no_gtkwave: false
+  }
+}
