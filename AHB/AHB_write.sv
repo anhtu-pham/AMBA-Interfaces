@@ -1,15 +1,13 @@
 module AHB_write (
     input logic hclk, hsel_x, hreset_n, hready, hwrite,
     input logic [1:0] write_select,
-    input logic [1:0] htrans,
-    input logic [2:0] hsize,
     input logic [7:0] hwdata,
     output logic [7:0] payload_0,
     output logic [7:0] payload_1,
     output logic [4:0] data_size,
     output logic hresp
 );
-    always_ff @(posedge pclk, negedge preset_n) begin
+    always_ff @(posedge hclk, negedge hreset_n) begin
         if (hsel_x) begin
             if (!hreset_n) begin
                 payload_0 <= 8'd0;

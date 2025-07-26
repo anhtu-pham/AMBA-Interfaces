@@ -1,8 +1,6 @@
 module AHB_read (
     input logic hclk, hsel_x, hreset_n, hready, hwrite,
     input logic [1:0] read_select,
-    input logic [1:0] htrans,
-    input logic [2:0] hsize,
     input logic [1:0] err_status,
     input logic [7:0] payload_0,
     input logic [7:0] payload_1,
@@ -12,7 +10,7 @@ module AHB_read (
 );
     always_ff @(posedge hclk, negedge hreset_n) begin
         if (hsel_x) begin
-            if (!hresets_n) begin
+            if (!hreset_n) begin
                 hrdata <= 8'd0;
             end else if (!hwrite && hready) begin
                 case (read_select)

@@ -18,26 +18,26 @@ module AHB_address_mapping #(
         if (hsel_x) begin
             if (hwrite && haddr == ERR_STATUS_ADDRESS) begin
                 hresp = 1'd1;
-            end else begin
+            end else if (htrans != 2'd0 && htrans != 2'd1) begin
                 case (haddr)
                     ERR_STATUS_ADDRESS: begin
                         read_select = 2'd0;
-                        if (htrans == 2'd3 && hsize > 3'd1) hresp = 1'd1;
+                        if (hsize > 3'd1) hresp = 1'd1;
                     end
                     PAYLOAD_ADDRESS: begin
                         write_select = 2'd0;
                         read_select = 2'd1;
-                        if (htrans == 2'd3 && hsize > 3'd2) hresp = 1'd1;
+                        if (hsize > 3'd2) hresp = 1'd1;
                     end
                     (PAYLOAD_ADDRESS + 1): begin
                         write_select = 2'd1;
                         read_select = 2'd2;
-                        if (htrans == 2'd3 && hsize > 3'd1) hresp = 1'd1;
+                        if (hsize > 3'd1) hresp = 1'd1;
                     end
                     DATA_SIZE_ADDRESS: begin
                         write_select = 2'd2;
                         read_select = 2'd3;
-                        if (htrans == 2'd3 && hsize > 3'd1) hresp = 1'd1;
+                        if (hsize > 3'd1) hresp = 1'd1;
                     end
                     default:
                         hresp = 1'd1;
