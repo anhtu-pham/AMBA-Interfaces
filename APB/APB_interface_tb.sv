@@ -14,7 +14,7 @@ module APB_interface_tb #(
     logic [7:0] prdata;
     logic pslverr;
 
-    APB_interface_module APB_dut (
+    APB_interface APB_dut (
         .pclk(pclk),
         .psel_x(psel_x),
         .preset_n(preset_n),

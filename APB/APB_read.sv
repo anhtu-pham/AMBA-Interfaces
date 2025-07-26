@@ -1,4 +1,4 @@
-module read_module (
+module APB_read (
     input logic pclk, psel_x, preset_n, penable, pready, pwrite,
     input logic [1:0] read_select,
     input logic [1:0] err_status,

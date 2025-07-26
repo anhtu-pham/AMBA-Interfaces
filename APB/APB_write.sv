@@ -1,4 +1,4 @@
-module write_module (
+module APB_write (
     input logic pclk, psel_x, preset_n, penable, pready, pwrite,
     input logic [1:0] write_select,
     input logic [7:0] pwdata,

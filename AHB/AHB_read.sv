@@ -1,4 +1,4 @@
-module read_module (
+module AHB_read (
     input logic hclk, hsel_x, hreset_n, hready, hwrite,
     input logic [1:0] read_select,
     input logic [1:0] htrans,

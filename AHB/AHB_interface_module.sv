@@ -1,4 +1,4 @@
-module AHB_interface_module(
+module AHB_interface (
     input logic hclk, hsel_x, hreset_n, hready, hwrite,
     input logic [2:0] haddr,
     input logic [1:0] htrans,
@@ -17,7 +17,7 @@ module AHB_interface_module(
     logic [1:0] htrans_reg, write_select_reg, read_select_reg;
     logic hsel_x_reg, hwrite_reg, hsize_reg;
 
-    address_mapping_module mapping_unit (
+    AHB_address_mapping mapping_unit (
         .hsel_x(hsel_x),
         .hwrite(hwrite),
         .htrans(htrans),
@@ -27,10 +27,10 @@ module AHB_interface_module(
         .hresp(hresp)
     );
 
-    read_module read_unit (
+    AHB_read read_unit (
         .hclk(hclk)
         .hsel_x(hsel_x_reg), 
-        .hreset_n(hreset_n),
+        .hreset_n(hreset_n), 
         .hready(hready), 
         .hwrite(hwrite_reg),
         .read_select(read_select_reg),
@@ -44,7 +44,7 @@ module AHB_interface_module(
         .hresp(hresp)
     );
 
-    write_module write_unit (
+    AHB_write write_unit (
         .hclk(hclk), 
         .hsel_x(hsel_x_reg),
         .hreset_n(hreset_n), 

@@ -1,4 +1,4 @@
-module APB_interface_module (
+module APB_interface (
     input logic pclk, psel_x, preset_n, penable, pready, pwrite,
     input logic [2:0] paddr,
     input logic [7:0] pwdata,
@@ -14,7 +14,7 @@ module APB_interface_module (
     logic [7:0] payload_0;
     logic [7:0] payload_1;
 
-    address_mapping_module mapping_unit (
+    APB_address_mapping mapping_unit (
         .psel_x(psel_x),
         .pwrite(pwrite),
         .paddr(paddr),
@@ -23,7 +23,7 @@ module APB_interface_module (
         .pslverr(pslverr)
     );
 
-    read_module read_unit (
+    APB_read read_unit (
         .pclk(pclk),
         .psel_x(psel_x),
         .preset_n(preset_n),
@@ -38,7 +38,7 @@ module APB_interface_module (
         .prdata(prdata)
     );
 
-    write_module write_unit (
+    APB_write write_unit (
         .pclk(pclk),
         .psel_x(psel_x),
         .preset_n(preset_n),
