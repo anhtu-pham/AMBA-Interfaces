@@ -12,7 +12,7 @@ module write_module (
                 payload_0 <= 8'd0;
                 payload_1 <= 8'd0;
                 data_size <= 5'd0;
-            end else if (pwrite && (penable && pready)) begin
+            end else if (pwrite && penable && pready) begin
                 case (write_select)
                     2'd0: payload_0 <= pwdata;
                     2'd1: payload_1 <= pwdata;
