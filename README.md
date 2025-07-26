@@ -1,3 +1,3 @@
 # AMBA_Interfaces
 
-Goal: design hardware architectures for APB and AHB interfaces.
+Goal: Design digital hardware architectures for APB and AHB interfaces with SystemVerilog.
