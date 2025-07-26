@@ -5,6 +5,7 @@ module AHB_read (
     input logic [7:0] payload_0,
     input logic [7:0] payload_1,
     input logic [4:0] data_size,
+    input logic current_hresp,
     output logic [7:0] hrdata,
     output logic hresp
 );
@@ -12,6 +13,7 @@ module AHB_read (
         if (hsel_x) begin
             if (!hreset_n) begin
                 hrdata <= 8'd0;
+                hresp <= 1'd0;
             end else if (!hwrite && hready) begin
                 case (read_select)
                     2'd0: hrdata <= {6'd0, err_status};
@@ -20,6 +22,7 @@ module AHB_read (
                     2'd3: hrdata <= {3'd0, data_size};
                     default: ;
                 endcase
+                hresp <= current_hresp;
             end
         end
     end

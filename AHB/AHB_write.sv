@@ -2,6 +2,7 @@ module AHB_write (
     input logic hclk, hsel_x, hreset_n, hready, hwrite,
     input logic [1:0] write_select,
     input logic [7:0] hwdata,
+    input logic current_hresp,
     output logic [7:0] payload_0,
     output logic [7:0] payload_1,
     output logic [4:0] data_size,
@@ -13,6 +14,7 @@ module AHB_write (
                 payload_0 <= 8'd0;
                 payload_1 <= 8'd0;
                 data_size <= 5'd0;
+                hresp <= 1'd0;
             end else if (hwrite && hready) begin
                 case (write_select)
                     2'd0: payload_0 <= hwdata;
@@ -20,6 +22,7 @@ module AHB_write (
                     2'd2: data_size <= hwdata[4:0];
                     default: ;
                 endcase
+                hresp <= current_hresp;
             end
         end
     end

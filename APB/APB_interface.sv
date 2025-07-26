@@ -2,11 +2,11 @@ module APB_interface (
     input logic pclk, psel_x, preset_n, penable, pready, pwrite,
     input logic [2:0] paddr,
     input logic [7:0] pwdata,
-    input logic [1:0] err_status,  // data for reading
-    output logic [15:0] payload,  // data over multiple registers for reading/writing
-    output logic [4:0] data_size,  // data in 1 register for reading/writing
+    input logic [1:0] err_status,   // data for reading
+    output logic [15:0] payload,    // data over multiple registers for reading/writing
+    output logic [4:0] data_size,   // data in 1 register for reading/writing
     output logic [7:0] prdata,
-    output logic pslverr  // transfer error bit
+    output logic pslverr            // transfer error bit
 );
     logic [1:0] write_select;
     logic [1:0] read_select;
