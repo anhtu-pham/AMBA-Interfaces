@@ -39,9 +39,9 @@ module APB_interface_tb #(
         @(posedge pclk);
         psel_x = 1'd0; preset_n = 1'd1; penable = 1'd0; pready = 1'd0; pwrite = 1'd0; paddr = 3'd0; pwdata = 8'd0; err_status = 2'd0;
 
-        // Write data_size = 12 (with pwrite = 1, paddr = DATA_SIZE_ADDRESS, pwdata = 12) to APB interface
+        // Write data_size = 12 (with pwrite = 1, paddr = DATA_SIZE_ADDRESS, pwdata = 12)
         @(posedge pclk); @(posedge pclk);
-        psel_x = 1'd1; pwrite = 1'd1; paddr = DATA_SIZE_ADDRESS; pwdata = 5'd12;
+        psel_x = 1'd1; pwrite = 1'd1; paddr = DATA_SIZE_ADDRESS; pwdata = 8'd12;
         @(posedge pclk);
         penable = 1'd1;
         @(posedge pclk);
@@ -67,7 +67,7 @@ module APB_interface_tb #(
         @(posedge pclk);
         psel_x = 1'd0; penable = 1'd0; pready = 1'd0; paddr = 3'd0;
 
-        // Write payload_1 = 8'00000011 (with pwrite = 1, paddr = PAYLOAD_ADDRESS, pwdata = 8'00000011)
+        // Write payload_1 = 8'00000011 (with pwrite = 1, paddr = PAYLOAD_ADDRESS + 1, pwdata = 8'00000011)
         @(posedge pclk);
         psel_x = 1'd1; pwrite = 1'd1; paddr = PAYLOAD_ADDRESS + 1; pwdata = 8'b00000011;
         @(posedge pclk);

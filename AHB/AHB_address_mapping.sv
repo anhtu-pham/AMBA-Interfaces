@@ -1,7 +1,10 @@
 module AHB_address_mapping #(
     parameter ERR_STATUS_ADDRESS = 1,
     parameter PAYLOAD_ADDRESS = 2,
-    parameter DATA_SIZE_ADDRESS = 4
+    parameter DATA_SIZE_ADDRESS = 4,
+    parameter ERR_STATUS_HSIZE = 0,
+    parameter PAYLOAD_HSIZE = 1,
+    parameter DATA_SIZE_HSIZE = 0
 ) (
     input logic hsel_x, hwrite,
     input logic [2:0] haddr,
@@ -22,22 +25,22 @@ module AHB_address_mapping #(
                 case (haddr)
                     ERR_STATUS_ADDRESS: begin
                         read_select = 2'd0;
-                        if (hsize > 3'd1) hresp = 1'd1;
+                        if (hsize > ERR_STATUS_HSIZE) hresp = 1'd1;
                     end
                     PAYLOAD_ADDRESS: begin
                         write_select = 2'd0;
                         read_select = 2'd1;
-                        if (hsize > 3'd2) hresp = 1'd1;
+                        if (hsize > PAYLOAD_HSIZE) hresp = 1'd1;
                     end
                     (PAYLOAD_ADDRESS + 1): begin
                         write_select = 2'd1;
                         read_select = 2'd2;
-                        if (hsize > 3'd1) hresp = 1'd1;
+                        if (hsize > PAYLOAD_HSIZE - 1) hresp = 1'd1;
                     end
                     DATA_SIZE_ADDRESS: begin
                         write_select = 2'd2;
                         read_select = 2'd3;
-                        if (hsize > 3'd1) hresp = 1'd1;
+                        if (hsize > DATA_SIZE_HSIZE) hresp = 1'd1;
                     end
                     default:
                         hresp = 1'd1;

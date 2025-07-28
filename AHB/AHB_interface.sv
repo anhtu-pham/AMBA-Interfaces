@@ -2,7 +2,7 @@ module AHB_interface (
     input logic hclk, hsel_x, hreset_n, hready, hwrite,
     input logic [2:0] haddr,
     input logic [1:0] htrans,
-    input logic [2:0] hsize,        // size of transfer = 2^hsize
+    input logic [2:0] hsize,        // size of transfer = 2^hsize (bytes)
     input logic [7:0] hwdata,
     input logic [1:0] err_status,   // data for reading
     output logic [15:0] payload,    // data over multiple registers for reading/writing
@@ -15,8 +15,10 @@ module AHB_interface (
     logic [7:0] payload_0, payload_1;
     logic hresp_wire;
     
-    logic hwrite_reg, hresp_reg;
-    logic [1:0] write_select_reg, read_select_reg;
+    logic hwrite_reg, hresp_reg, hready_out_read_reg, hready_out_write_reg, hresp_read_reg, hresp_write_reg;
+    logic [1:0] write_select_reg, read_select_reg, htrans_reg;
+    logic [7:0] hwdata_reg;
+    logic hready_reg, had_hready_reg;
 
     AHB_address_mapping mapping_unit (
         .hsel_x(hsel_x),
@@ -36,13 +38,15 @@ module AHB_interface (
         .hready(hready), 
         .hwrite(hwrite_reg),
         .read_select(read_select_reg),
+        .htrans(htrans_reg),
         .err_status(err_status),
         .payload_0(payload_0),
         .payload_1(payload_1),
         .data_size(data_size),
         .current_hresp(hresp_reg),
         .hrdata(hrdata),
-        .hresp(hresp)
+        .hready_out(hready_out_read_reg),
+        .hresp(hresp_read_reg)
     );
 
     AHB_write write_unit (
@@ -52,27 +56,38 @@ module AHB_interface (
         .hready(hready), 
         .hwrite(hwrite_reg),
         .write_select(write_select_reg),
+        .htrans(htrans_reg),
         .hwdata(hwdata),
         .current_hresp(hresp_reg),
         .payload_0(payload_0),
         .payload_1(payload_1),
         .data_size(data_size),
-        .hresp(hresp)
+        .hready_out(hready_out_write_reg),
+        .hresp(hresp_write_reg)
     );
 
     always_ff @(posedge hclk, negedge hreset_n) begin
-        if (hsel_x) begin
-            if (!hreset_n) begin
-                hwrite_reg <= 1'dx;
-                write_select_reg <= 2'dx;
-                read_select_reg <= 2'dx;
-                hresp_reg <= 1'd0;
-            end else if (hready) begin
+        if (hsel_x && !hreset_n) begin
+            hwrite_reg <= 1'dx;
+            write_select_reg <= 2'dx;
+            read_select_reg <= 2'dx;
+            htrans_reg <= 2'd0;
+            hresp_reg <= 1'd0;
+            hready_reg <= 1'd0;
+            had_hready_reg <= 1'd0;
+        end else begin
+            if (hsel_x && hready) begin
                 hwrite_reg <= hwrite;
                 write_select_reg <= write_select;
                 read_select_reg <= read_select;
+                htrans_reg <= htrans;
                 hresp_reg <= hresp_wire;
             end
+            hready_reg <= hready;
+            had_hready_reg <= hready_reg;
         end
     end
+
+    assign hready_out = (hwrite_reg) ? hready_out_write_reg : hready_out_read_reg;
+    assign hresp = (hwrite_reg) ? hresp_write_reg : hresp_read_reg;
 endmodule
