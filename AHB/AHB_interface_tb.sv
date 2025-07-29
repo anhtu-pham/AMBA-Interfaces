@@ -65,17 +65,18 @@ module AHB_interface_tb #(
 
         // Read data_size (with hwrite = 0, haddr = DATA_SIZE_ADDRESS)
         @(posedge hclk);
-        hsel_x = 1'd1; hready = 1'd0; hwrite = 1'd0; haddr = DATA_SIZE_ADDRESS; htrans = 2'd2; hsize = 3'd0; // read data_size -> no hwdata for data_size in address phase
-        @(posedge hclk);
-        hready = 1'd1;
+        hsel_x = 1'd1; hready = 1'd1; hwrite = 1'd0; haddr = DATA_SIZE_ADDRESS; htrans = 2'd2; hsize = 3'd0; // no hwdata for data_size in address phase (read data_size)
         // Write payload_1 = 8'b00001101 (with hwrite = 1, haddr = PAYLOAD_ADDRESS + 1, hwdata = 8'b00001101)
         @(posedge hclk);
-        hready = 1'd0; hwrite = 1'd1; haddr = PAYLOAD_ADDRESS + 1; htrans = 2'd2; hsize = PAYLOAD_HSIZE - 1; // no hwdata for payload_1 in address phase, read data_size -> no hwdata for data_size in data phase
+        hready = 1'd0; hwrite = 1'd1; haddr = PAYLOAD_ADDRESS + 1; htrans = 2'd2; hsize = PAYLOAD_HSIZE - 1; // no hwdata for data_size in data phase (read data_size), no hwdata for payload_1 in address phase
         @(posedge hclk);
         hready = 1'd1;
+        // Read payload_1 (with hwrite = 0, haddr = PAYLOAD_ADDRESS + 1)
+        @(posedge hclk);
+        hready = 1'd1; hwrite = 1'd0; haddr = PAYLOAD_ADDRESS + 1; htrans = 2'd2; hsize = 3'd0; hwdata = 8'b00001101; // hwdata for payload_1 in data phase, no hwdata for payload_1 in address phase (read payload_1)
         // IDLE transaction
         @(posedge hclk);
-        hready = 1'd1; hwrite = 1'd0; haddr = 3'd0; htrans = 2'd0; hsize = 3'd0; hwdata = 8'b00001101; // hwdata for payload_1 in data phase
+        hready = 1'd1; hwrite = 1'd0; haddr = 3'd0; htrans = 2'd0; hsize = 3'd0; // no hwdata for payload_1 in data phase (read payload_1)
         @(posedge hclk);
         hready = 1'd0;
         @(posedge hclk);

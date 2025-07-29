@@ -19,15 +19,9 @@ module AHB_write (
                 hresp <= 1'd0;
             end else if (hwrite && hready) begin
                 case (write_select)
-                    2'd0: begin
-                        payload_0 <= hwdata;
-                    end
-                    2'd1: begin
-                        payload_1 <= hwdata;
-                    end
-                    2'd2: begin
-                        data_size <= hwdata[4:0];
-                    end
+                    2'd0: payload_0 <= hwdata;
+                    2'd1: payload_1 <= hwdata;
+                    2'd2: data_size <= hwdata[4:0];
                     default: ;
                 endcase
                 hready_out <= 1'd1;
