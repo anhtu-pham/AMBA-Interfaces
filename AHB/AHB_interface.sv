@@ -15,8 +15,8 @@ module AHB_interface (
     logic [7:0] payload_0, payload_1;
     logic hresp_wire;
     
-    logic hwrite_reg, hresp_reg, hready_out_read_reg, hready_out_write_reg, hresp_read_reg, hresp_write_reg;
-    logic [1:0] write_select_reg, read_select_reg, htrans_reg;
+    logic hwrite_reg, hwrite_reg_next, hresp_reg, hready_out_read_reg, hready_out_write_reg, hresp_read_reg, hresp_write_reg;
+    logic [1:0] write_select_reg, read_select_reg;
     logic [7:0] hwdata_reg;
     logic hready_reg, had_hready_reg;
 
@@ -38,7 +38,6 @@ module AHB_interface (
         .hready(hready), 
         .hwrite(hwrite_reg),
         .read_select(read_select_reg),
-        .htrans(htrans_reg),
         .err_status(err_status),
         .payload_0(payload_0),
         .payload_1(payload_1),
@@ -56,7 +55,6 @@ module AHB_interface (
         .hready(hready), 
         .hwrite(hwrite_reg),
         .write_select(write_select_reg),
-        .htrans(htrans_reg),
         .hwdata(hwdata),
         .current_hresp(hresp_reg),
         .payload_0(payload_0),
@@ -71,16 +69,15 @@ module AHB_interface (
             hwrite_reg <= 1'dx;
             write_select_reg <= 2'dx;
             read_select_reg <= 2'dx;
-            htrans_reg <= 2'd0;
             hresp_reg <= 1'd0;
             hready_reg <= 1'd0;
             had_hready_reg <= 1'd0;
         end else begin
             if (hsel_x && hready) begin
                 hwrite_reg <= hwrite;
+                hwrite_reg_next <= hwrite_reg;
                 write_select_reg <= write_select;
                 read_select_reg <= read_select;
-                htrans_reg <= htrans;
                 hresp_reg <= hresp_wire;
             end
             hready_reg <= hready;
@@ -88,6 +85,6 @@ module AHB_interface (
         end
     end
 
-    assign hready_out = (hwrite_reg) ? hready_out_write_reg : hready_out_read_reg;
-    assign hresp = (hwrite_reg) ? hresp_write_reg : hresp_read_reg;
+    assign hready_out = (hwrite_reg_next) ? hready_out_write_reg : hready_out_read_reg;
+    assign hresp = (hwrite_reg_next) ? hresp_write_reg : hresp_read_reg;
 endmodule
