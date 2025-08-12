@@ -1,3 +1,3 @@
-# AMBA_Interfaces
+# AMBA Interfaces
 
-Design digital hardware architectures for APB and AHB interfaces with SystemVerilog.
+Design digital hardware architectures of AMBA AHB and APB interfaces for SoC subordinate with SystemVerilog.
